@@ -15,6 +15,7 @@ ArgumentParser: class {
     knownArgs := HashMap<Action> new()
     namespace := HashMap<String> new()
     actions := ArrayList<Action> new()
+    
     init: func() {}
     
     addOption: func(shortOption, longOption, dest, action: String) {
@@ -23,6 +24,7 @@ ArgumentParser: class {
     }
 
     parseArguments: func(arguments: Array<String>) -> HashMap<String>{
+        _initDefaultNamespace()
         for (arg in arguments) {
             if (arg startsWith("-")) {
                 for (action in knownArgs) {
@@ -39,15 +41,21 @@ ArgumentParser: class {
     }
     _parseActions: func(actions: ArrayList<Action>) {
         for (action in actions) {
+            
             match action action {
                 case "store_true" => namespace put(action name, "1")
                 case "store_false" => namespace put(action name, "0")
-                case => namespace put(action name, "default") // preventing segfaults =)
                     
             }
         }
          
-    }      
+    }
+    
+    _initDefaultNamespace: func() {
+        for (name in knownArgs keys) {
+            namespace put(name, "default")
+        }
+    }           
 }
             
 main: func(args: Array<String>) {
