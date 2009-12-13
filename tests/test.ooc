@@ -1,4 +1,5 @@
-import ../source/Argparser
+use clooc
+import clooc/Argparser
 import structs/[Array,ArrayList,HashMap]
 
 toArrayList: func<T>(array: Array<T>) -> ArrayList<T> {
