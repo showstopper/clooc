@@ -66,8 +66,8 @@ ArgumentParser: class {
 
     _getShortVal: func(arg: String, args: ArrayList<String>) -> String {
         pos := args indexOf(arg)
-        result := ""
-        if (args size() >= pos+1) { 
+        result := "default"
+        if (args size() - 1  >= pos+1) { 
             result = args get(pos+1)
         }      
         return result
