@@ -15,8 +15,11 @@ main: func(args: Array<String>) {
     parser addOption("-a", "--aa", "a", Action STORE_TRUE)
     parser addOption("-b", "--bb", "b", Action STORE_FALSE)
     parser addOption("-c", "--cc", "c", Action STORE)
-    parsedArguments := parser parseArguments(toArrayList(args))
-    parsedArguments get("a") println()
-    parsedArguments get("b") println()
-    parsedArguments get("c") println()
+    result := parser parseArguments(toArrayList(args))
+    result options get("a") println()
+    result options get("b") println()
+    result options get("c") println()
+    for (arg in result arguments) {
+        arg println()
+    }
 }

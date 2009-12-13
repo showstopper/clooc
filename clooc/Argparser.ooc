@@ -23,6 +23,17 @@ Action: class {
 }
 Cell: class<t> {init: func(){}}
 
+ParsingResult: cover {
+    options: HashMap<String>
+    arguments: ArrayList<String>
+    new: static func(.options, .arguments) -> This {
+        this: This
+        this options = options
+        this arguments = arguments
+        return this
+    }
+}
+
 ArgumentParser: class {
     knownArgs := HashMap<Action> new()
     namespace := HashMap<String> new()
@@ -48,12 +59,11 @@ ArgumentParser: class {
         }
     }
 
-    _parseShortOption: func(arg: String, args: ArrayList<String>)   {
+    _parseShortOption: func(arg: String, args: ArrayList<String>, rargs: ArrayList<String>)   {
         for (action in knownArgs) {
             if (action shortOption == arg) {
                 if (action action == Action STORE) {
-                    action setVal(_getShortVal(arg, args))
-                    
+                    action setVal(_getShortVal(arg, args, rargs))
                 }
                 actions add(action)
             }
@@ -64,29 +74,33 @@ ArgumentParser: class {
         arg substring(arg indexOf('=')+1)
     }
 
-    _getShortVal: func(arg: String, args: ArrayList<String>) -> String {
+    _getShortVal: func(arg: String, args, rargs: ArrayList<String>) -> String {
         pos := args indexOf(arg)
         result := "default"
         if (args size() - 1  >= pos+1) { 
             result = args get(pos+1)
+            rargs removeAt(pos+1)
         }      
         return result
     }
 
-    parseArguments: func(arguments: ArrayList<String>) -> HashMap<String>{
+    parseArguments: func(arguments: ArrayList<String>) -> ParsingResult{
         _initDefaultNamespace()
         rargs := arguments clone()
+        rargs removeAt(0) // get rid of program name
         for (arg in rargs) {
             if (arg startsWith("-")) {
                 if (arg startsWith("--")) {
                     _parseLongOption(arg)
+                    rargs remove(arg)
                 } else {
-                    _parseShortOption(arg, arguments)
+                    _parseShortOption(arg, arguments, rargs)
+                    rargs remove(arg)
                 }
             }        
         }
         _parseActions(actions)
-        return namespace
+        return ParsingResult new(namespace, rargs)
     } 
     
     _parseActions: func(actions: ArrayList<Action>) {
