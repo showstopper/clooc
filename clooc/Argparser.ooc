@@ -9,9 +9,10 @@ Action: class {
     shortOption := ""
     longOption := ""
     name: String
-    value := "default"
+    value :String
     action: Int
-    init: func(=name, =shortOption, =longOption, =action) {}
+    def: String
+    init: func(=name, =shortOption, =longOption, =def, =action) {value=def}
     setVal: func(=value){}
     getValue: func() -> String {
         match action {
@@ -41,8 +42,13 @@ ArgumentParser: class {
     
     init: func() {}
     
-    addOption: func(shortOption, longOption, dest: String,  action: Int) {
-        newAction := Action new(dest, shortOption, longOption, action)
+    addOption: func(shortOption, longOption, dest: String, action: Int) {
+        newAction := Action new(dest, shortOption, longOption, "default", action)
+        knownArgs put(dest, newAction)
+    }
+
+    addOption: func ~explicitDefault(shortOption, longOption, dest, def: String, action: Int) {
+        newAction := Action new(dest, shortOption, longOption, def, action)
         knownArgs put(dest, newAction)
     }
 
@@ -63,7 +69,7 @@ ArgumentParser: class {
         for (action in knownArgs) {
             if (action shortOption == arg) {
                 if (action action == Action STORE) {
-                    action setVal(_getShortVal(arg, args, rargs))
+                    action setVal(_getShortVal(arg, action def, args, rargs))
                 }
                 actions add(action)
             }
@@ -74,13 +80,14 @@ ArgumentParser: class {
         arg substring(arg indexOf('=')+1)
     }
 
-    _getShortVal: func(arg: String, args, rargs: ArrayList<String>) -> String {
+    _getShortVal: func(arg, def: String, args, rargs: ArrayList<String>) -> String {
         pos := args indexOf(arg)
-        result := "default"
+        result := def
         if (args size() - 1  >= pos+1) { 
             result = args get(pos+1)
             rargs removeAt(pos+1)
         }      
+        result println()
         return result
     }
 
@@ -111,7 +118,7 @@ ArgumentParser: class {
     
     _initDefaultNamespace: func() {
         for (name in knownArgs keys) {
-            namespace put(name, "default")
+            namespace put(name, knownArgs get(name) def)
         }
     }           
 }
