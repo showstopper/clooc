@@ -1,4 +1,3 @@
-Name: Clooc
-Description: Cli-ooc, optionparser for ooc
+Name: clooc
+Description: commandline argumentparser library written in ooc
 SourcePath: .
-

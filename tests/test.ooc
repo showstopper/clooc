@@ -1,17 +1,22 @@
 use clooc
 import structs/[Array,ArrayList,HashMap]
-import clooc/Argparser
+import clooc/[Action,ArgParser,Utils]
 
 main: func(args: Array<String>) {
     parser := ArgumentParser new()
-    parser addOption("-a", "--aa", "a", Action STORE_TRUE)
-    parser addOption("-b", "--bb", "b", Action STORE_FALSE)
-    parser addOption("-c", "--cc", "c", Action STORE)
+    parser addOption(ArrayList<String> new(["-a", "--a"],2), "a", Action STORE_TRUE)
+    parser addOption(ArrayList<String> new(["-b", "--b"],2), "b", Action STORE_FALSE)
+    parser addOption(ArrayList<String> new(["-c", "--c"],2), "c", Action STORE)
     result := parser parseArguments(args toArrayList())
-    result options get("a") println()
-    result options get("b") println()
-    result options get("c") println()
-    for (arg in result arguments) {
-        arg println()
+    options := result options
+    if (options["a"] val) {
+        "Store-True works!" println()
+    }
+    if (options["b"] val == false) {
+        "Store-False works!" println()
+    }
+    if (options["c"] val) {
+        options["c"] val as String println()
+        "Store works!"
     }
 }
