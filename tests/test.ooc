@@ -9,14 +9,19 @@ main: func(args: Array<String>) {
     parser addOption(ArrayList<String> new(["-c", "--c"],2), "c", Action STORE)
     result := parser parseArguments(args toArrayList())
     options := result options
-    if (options["a"] val) {
-        "Store-True works!" println()
+    if (options["a"] T != None) {
+        if (options["a"] val) {
+            "Store-True works!" println()
+        }
     }
-    if (options["b"] val == false) {
-        "Store-False works!" println()
+    if (options["b"] T != None) {
+        if (!options["b"] val) {
+            "Store-False works!" println()
+        }
     }
-    if (options["c"] val) {
-        options["c"] val as String println()
-        "Store works!"
+    if (options["c"] T != None) {
+        (options["c"] val as String) println()
+        //printf("%d\n", (options["c"] val  as String) length())
+        "Store works!" println()
     }
 }

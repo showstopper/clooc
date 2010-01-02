@@ -21,16 +21,15 @@ ShortOption: class extends Action {
             if (args size() - 1  >= pos+1) { 
                 result := args get(pos+1)
                 rargs removeAt(pos+1)
-                result println()
                 return Cell<String> new(result)
             } 
-            return Cell<Pointer> new(null)
+            "Error: missing argument!" println() // TODO: Add *real* error handling
+            return Cell<None> new(None new())
         } else {
             "Unkown action type!" println()
-            return Cell<Pointer> new(null)
+            return Cell<None> new(None new())
         }
     }
-    
     matches: func(pattern: String) -> Bool {
         myArg == pattern
     }
@@ -46,10 +45,10 @@ LongOption: class extends Action {
             if (arg indexOf('=') != -1) {
                 return Cell<String> new(arg substring(arg indexOf('=')+1))
             }
-            return Cell<Pointer> new(null)
+            return Cell<None> new(None new())
         } else {
             "Unkown action type!" println()
-            return Cell<Pointer> new (null)
+            return Cell<None> new (None new())
         }
     }
     matches: func(pattern: String) -> Bool {

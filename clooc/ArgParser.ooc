@@ -37,12 +37,12 @@ ArgumentParser: class {
         _initDefaultNamespace()
         rargs := args clone()
         rargs removeAt(0) // Remove (uninteresting) program-name
-        for (arg in args) { // TODO: > N^2 runtime -> evil!
+        for (arg in args) {             
             for (action in actions) {
                 if (action myArg == arg) {
                     pos := args indexOf(arg)
                     val := action getValue(args, rargs, pos)
-                    namespace put(action name, val)
+                    namespace[action name] = val
                 }
             }
         }
@@ -50,7 +50,7 @@ ArgumentParser: class {
     }
     _initDefaultNamespace: func {
         for (action in actions) {
-            namespace[action name] = Cell<Pointer> new(null)
+            namespace[action name] = Cell<Pointer> new(None new())
         }
     } 
 }
