@@ -1,6 +1,7 @@
 use clooc
 import structs/[Array,ArrayList,HashMap]
 import clooc/[Action,ArgParser,Utils]
+import clooc/Bag
 
 main: func(args: Array<String>) {
     parser := ArgumentParser new()
@@ -8,7 +9,7 @@ main: func(args: Array<String>) {
     parser addOption(ArrayList<String> new(["-b", "--b"],2), "b", Action STORE_FALSE)
     parser addOption(ArrayList<String> new(["-c", "--c"],2), "c", Action STORE)
     result := parser parseArguments(args toArrayList())
-    options := result options
+    options := result get(0, HashMap<Cell<Pointer>>)
     if (options["a"] T != None) {
         if (options["a"] val) {
             "Store-True works!" println()

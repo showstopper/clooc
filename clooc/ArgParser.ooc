@@ -1,6 +1,7 @@
 use clooc
 import structs/[Array,ArrayList,HashMap]
 import clooc/[Action,Utils]
+import Bag
 
 ArgumentParser: class {
     actions := ArrayList<Action> new()
@@ -25,7 +26,7 @@ ArgumentParser: class {
             }
         }
     }
-    parseArguments: func(args: ArrayList<String>) -> ParsingResult {
+    parseArguments: func(args: ArrayList<String>) -> Bag {
     /*
     parseArguments:
     Reads all arguments and fills the namespace with the values parsed by
@@ -46,7 +47,10 @@ ArgumentParser: class {
                 }
             }
         }
-        return ParsingResult new(namespace, rargs)
+        toRet := Bag new(2)
+        toRet add(namespace).add(rargs)
+        return toRet
+        //return ParsingResult new(namespace, rargs)
     }
     _initDefaultNamespace: func {
         for (action in actions) {
