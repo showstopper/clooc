@@ -1,10 +1,5 @@
 import structs/[ArrayList,HashMap]
 
-Cell: class <T> {
-    val :T
-    init: func(=val) {}
-}
-
 ParsingResult: cover {
     options: HashMap<Cell<Pointer>>
     arguments: ArrayList<String>
