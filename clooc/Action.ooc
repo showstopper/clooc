@@ -1,5 +1,5 @@
 use clooc
-import structs/[ArrayList,HashMap]
+import structs/[ArrayList]
 import clooc/Utils
 
 Action: abstract class {

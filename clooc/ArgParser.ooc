@@ -1,11 +1,12 @@
 use clooc
-import structs/[Array,ArrayList,HashMap]
+import structs/[Array,ArrayList]
 import clooc/[Action,Utils]
-import Bag
+import HashBag
 
 ArgumentParser: class {
     actions := ArrayList<Action> new()
-    namespace := HashMap<Cell<Pointer>> new()
+    namespace := HashBag new()
+    //<Cell<Pointer>> new()
     init: func() {}
     addOption: func(patterns: ArrayList<String>, dest: String, action: Int) {
     /*
@@ -26,7 +27,7 @@ ArgumentParser: class {
             }
         }
     }
-    parseArguments: func(args: ArrayList<String>) -> Bag {
+    parseArguments: func(args: ArrayList<String>) -> HashBag {
     /*
     parseArguments:
     Reads all arguments and fills the namespace with the values parsed by
@@ -47,14 +48,15 @@ ArgumentParser: class {
                 }
             }
         }
-        toRet := Bag new(2)
-        toRet add(namespace).add(rargs)
+        toRet := HashBag new(2)
+        toRet put("options", namespace).put("arguments", rargs)
         return toRet
         //return ParsingResult new(namespace, rargs)
     }
+
     _initDefaultNamespace: func {
         for (action in actions) {
-            namespace[action name] = Cell<Pointer> new(None new())
+            namespace[action name] = Cell<None> new(None new())
         }
     } 
 }
