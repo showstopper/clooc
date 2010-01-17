@@ -43,11 +43,11 @@ HashBag: class {
     remove: func (key: String) -> Bool {
         return myMap remove(key)
     }
+
+    size: func -> Int {myMap size}
+
+    exists: func(key: String) -> Bool {
+        myMap get(key) T != None
+    }
 }
-
-
-    
-
-
-
 

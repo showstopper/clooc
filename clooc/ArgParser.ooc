@@ -1,6 +1,6 @@
-use clooc
+//use clooc
 import structs/[Array,ArrayList]
-import clooc/[Action,Utils]
+import Action
 import HashBag
 
 ArgumentParser: class {
@@ -8,6 +8,7 @@ ArgumentParser: class {
     namespace := HashBag new()
     //<Cell<Pointer>> new()
     init: func() {}
+    
     addOption: func(patterns: ArrayList<String>, dest: String, action: Int) {
     /*
     addOption:
@@ -27,6 +28,8 @@ ArgumentParser: class {
             }
         }
     }
+
+    
     parseArguments: func(args: ArrayList<String>) -> HashBag {
     /*
     parseArguments:
@@ -34,29 +37,26 @@ ArgumentParser: class {
     the several action-classes.
     @args: The arguments passed to main
     @return: Structure containing all options and arguments
-    
-    */   
+    */
         _initDefaultNamespace()
         rargs := args clone()
         rargs removeAt(0) // Remove (uninteresting) program-name
         for (arg in args) {             
             for (action in actions) {
-                if (action myArg == arg) {
+                if (action matches(arg)) {
                     pos := args indexOf(arg)
-                    val := action getValue(args, rargs, pos)
-                    namespace[action name] = val
+                    action getValue(args, rargs, pos, namespace)
                 }
             }
         }
         toRet := HashBag new(2)
         toRet put("options", namespace).put("arguments", rargs)
         return toRet
-        //return ParsingResult new(namespace, rargs)
     }
 
     _initDefaultNamespace: func {
         for (action in actions) {
-            namespace[action name] = Cell<None> new(None new())
+            namespace put(action name, None new())
         }
     } 
 }
