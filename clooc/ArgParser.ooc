@@ -18,18 +18,13 @@ ArgumentParser: class {
     @action: Specifies what should be done with the argument (e.g. acting as bool-flag)
     @return: Nothing
     */
-        action: Action
         for (patt in patterns) {
             if (patt startsWith("--")) {
                 "long-option" println()
-                action = Action new(patt, dest, action, FuncSpace getLongValue as Func, FuncSpace matchLong as Func)
-                actions add(action)
-                //LongOption new(patt, dest, action))
+                actions add(Action new(patt, dest, action, FuncSpace getLongValue as Func, FuncSpace matchLong as Func))
             } else if (patt startsWith("-")) {
                 "short-option" println()
-                action = Action new(patt, dest, action, FuncSpace getShortValue as Func, FuncSpace matchSimple as Func)
-                actions add(action)
-                //actions add (ShortOption new(patt, dest, action))
+                actions add(Action new(patt, dest, action, FuncSpace getShortValue as Func, FuncSpace matchSimple as Func))
                 
             }
         }
